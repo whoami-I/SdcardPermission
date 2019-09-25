@@ -141,6 +141,12 @@ public class PermissionFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SDCARD_PERMISSION_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             Uri treeUri = data.getData();
+
+            //判断是否返回的uri真的是sd卡的uri
+            if (!treeUri.getPath().endsWith("tree/" + getSDCardName() + ":")) {
+                return;
+            }
+
             // save permission ,it is valid even reboot
             getActivity().getContentResolver().takePersistableUriPermission(treeUri, data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION));
             // save the uri， incase we can use it at other place
