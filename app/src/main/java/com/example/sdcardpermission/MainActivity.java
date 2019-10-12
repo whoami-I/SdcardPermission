@@ -23,17 +23,7 @@ public class MainActivity extends AppCompatActivity {
                 PermissionManager.requestSdcardPermission(MainActivity.this, new PermissionFragment.OnPermissionResultListener() {
                     @Override
                     public void onGranted(Uri uri) {
-                        DocumentFile documentFile = DocumentFile.fromTreeUri(MainActivity.this, uri);
-                        DocumentFile file = documentFile.createFile("text/plain", "123.txt");
-                        OutputStream outputStream = null;
-                        try {
-                            outputStream = getContentResolver().openOutputStream(file.getUri());
-                            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
-                            outputStreamWriter.write("hahahahahahaha");
-                            outputStreamWriter.close();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                        //....
                     }
 
                     @Override

@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.storage.StorageManager;
 import android.os.storage.StorageVolume;
+import android.provider.DocumentsContract;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
@@ -105,7 +106,12 @@ public class PermissionFragment extends Fragment {
                 startActivityForResult(intent, SDCARD_PERMISSION_REQUEST_CODE);
             }
         } else {
+            // add request paranmeter,it can go to sdcard authorization directly in Android Q
+            String sdcardName = getSDCardName();
+            Uri uri = DocumentsContract.buildRootsUri("com.android.externalstorage.documents");
+            Uri rootUri = uri.buildUpon().appendPath(sdcardName).build();
             intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, rootUri);
             startActivityForResult(intent, SDCARD_PERMISSION_REQUEST_CODE);
         }
     }
@@ -142,7 +148,7 @@ public class PermissionFragment extends Fragment {
         if (requestCode == SDCARD_PERMISSION_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             Uri treeUri = data.getData();
 
-            //判断是否返回的uri真的是sd卡的uri
+            //判断是否返回的uri真的是sd卡的tree uri
             if (!treeUri.getPath().endsWith("tree/" + getSDCardName() + ":")) {
                 return;
             }
